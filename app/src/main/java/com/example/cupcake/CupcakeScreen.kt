@@ -100,7 +100,11 @@ fun CupcakeApp(
         ) {
             composable(route = CupcakeScreen.Start.name) {
                 StartOrderScreen(
-                    quantityOptions = DataSource.quantityOptions
+                    quantityOptions = DataSource.quantityOptions,
+                    onNextButtonClicked = {
+                        viewModel.setQuantity(it)
+                        navController.navigate(CupcakeScreen.Flavor.name)
+                    }
                 )
             }
 
@@ -111,7 +115,9 @@ fun CupcakeApp(
                     options = DataSource.flavors.map {
                         context.resources.getString(id)
                     },
-                    onSelectionChanged = { viewModel.setFlavor(it) }
+                    onSelectionChanged = { viewModel.setFlavor(it) },
+                    onNextButtonClicked = { navController.navigate(CupcakeScreen.Pickup.name) },
+                    onCancelButtonClicked = {}
                 )
             }
 
@@ -119,12 +125,20 @@ fun CupcakeApp(
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     options = uiState.pickupOptions,
-                    onSelectionChanged = { viewModel.setDate(it) }
+                    onSelectionChanged = { viewModel.setDate(it) },
+                    onNextButtonClicked = { navController.navigate(CupcakeScreen.Summary.name) },
+                    onCancelButtonClicked = {  }
                 )
             }
 
             composable(route = CupcakeScreen.Summary.name) {
-                OrderSummaryScreen(orderUiState = uiState)
+                OrderSummaryScreen(
+                    orderUiState = uiState,
+                    onSendButtonClicked = {subject: String, summary: String ->
+
+                    },
+                    onCancelButtonClicked = {}
+                )
             }
         }
 
