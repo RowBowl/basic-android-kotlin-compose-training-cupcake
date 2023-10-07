@@ -117,7 +117,12 @@ fun CupcakeApp(
                     },
                     onSelectionChanged = { viewModel.setFlavor(it) },
                     onNextButtonClicked = { navController.navigate(CupcakeScreen.Pickup.name) },
-                    onCancelButtonClicked = {}
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    }
                 )
             }
 
@@ -127,7 +132,12 @@ fun CupcakeApp(
                     options = uiState.pickupOptions,
                     onSelectionChanged = { viewModel.setDate(it) },
                     onNextButtonClicked = { navController.navigate(CupcakeScreen.Summary.name) },
-                    onCancelButtonClicked = {  }
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    }
                 )
             }
 
@@ -137,10 +147,22 @@ fun CupcakeApp(
                     onSendButtonClicked = {subject: String, summary: String ->
 
                     },
-                    onCancelButtonClicked = {}
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    }
                 )
             }
         }
-
     }
+}
+
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OrderViewModel,
+    navController: NavHostController
+) {
+    viewModel.resetOrder()
+    navController.popBackStack(CupcakeScreen.Start.name, inclusive = false)
 }
